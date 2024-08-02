@@ -1,0 +1,34 @@
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.deps.json
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.dll
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.pdb
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\RepositoryLayer.dll
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\RepositoryLayer.pdb
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.csproj.AssemblyReference.cache
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.AssemblyInfoInputs.cache
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.AssemblyInfo.cs
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.csproj.CoreCompileInputs.cache
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.csproj.CopyComplete
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.dll
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\refint\BusinessServiceLayer.dll
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.pdb
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\ref\BusinessServiceLayer.dll
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.runtimeconfig.json
+D:\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.genruntimeconfig.cache
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.deps.json
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.runtimeconfig.json
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\BusinessServiceLayer.pdb
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\RepositoryLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\bin\Debug\net8.0\RepositoryLayer.pdb
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.csproj.AssemblyReference.cache
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.AssemblyInfoInputs.cache
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.AssemblyInfo.cs
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.csproj.CoreCompileInputs.cache
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\Business.B0C37BE5.Up2Date
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\refint\BusinessServiceLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.pdb
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.genruntimeconfig.cache
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\ref\BusinessServiceLayer.dll
