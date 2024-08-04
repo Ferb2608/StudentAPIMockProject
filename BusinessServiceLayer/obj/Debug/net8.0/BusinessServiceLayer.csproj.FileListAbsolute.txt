@@ -32,3 +32,4 @@ E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\Bu
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.pdb
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.genruntimeconfig.cache
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\ref\BusinessServiceLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\BusinessServiceLayer\obj\Debug\net8.0\BusinessServiceLayer.sourcelink.json

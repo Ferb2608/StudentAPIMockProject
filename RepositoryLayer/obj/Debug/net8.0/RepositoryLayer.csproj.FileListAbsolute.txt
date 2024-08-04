@@ -26,3 +26,4 @@ E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\Re
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\RepositoryLayer\obj\Debug\net8.0\RepositoryLayer.pdb
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\RepositoryLayer\obj\Debug\net8.0\RepositoryLayer.genruntimeconfig.cache
 E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\RepositoryLayer\obj\Debug\net8.0\ref\RepositoryLayer.dll
+E:\C# Mock Project\BasicStudentManagementAPI_3 Layers_Pilot_Project_Session 6\RepositoryLayer\obj\Debug\net8.0\RepositoryLayer.sourcelink.json
