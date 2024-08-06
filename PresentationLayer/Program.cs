@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessServiceLayer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PresentationLayer;
 using RepositoryLayer;
 using System.Configuration;
@@ -17,7 +18,11 @@ namespace WebAPISample
             // Add services to the container.
             builder.Services.AddRazorPages();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<SchoolContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<SchoolContext>(options => 
+             {
+                options.UseSqlServer(connectionString);
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             builder.Services.AddScoped<StudentRepository>();
             builder.Services.AddScoped<StudentService>();

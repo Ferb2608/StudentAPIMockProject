@@ -17,7 +17,7 @@ namespace RepositoryLayer
         public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null,
                                   Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                                   int pageNumber = 1,
-                                  int pageSize = 10)
+                                  int pageSize = 10, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = dbSet;
 
@@ -27,10 +27,16 @@ namespace RepositoryLayer
 
             //Sorting
             if (orderBy != null)
-                return orderBy(query);
+                query = orderBy(query);
 
             //Paging
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
             return await query.ToListAsync();
         }
 
@@ -59,10 +65,16 @@ namespace RepositoryLayer
             dbContext.SaveChanges();
         }
 
-        public virtual async void Delete(int id)
+        public virtual async Task Delete(int id)
         {
             dbSet.Remove(await Get(id));
             dbContext.SaveChanges();
+        }
+        public async Task<IEnumerable<T>> GetByProperty(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = dbSet;
+            query = query.Where(predicate);
+            return await query.ToListAsync();
         }
     }
 }

@@ -14,11 +14,11 @@ namespace WebAPISample.Controllers
             this.studentService = studentService;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    return Ok(await studentService.Get(pageNumber: pageNumber, pageSize: pageSize));
-        //}
+        [HttpGet]
+        public async Task<ActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        {
+            return Ok(await studentService.Get(pageNumber: pageNumber, pageSize: pageSize));
+        }
 
         //GET api/<StudentsController>/5
         [HttpGet("{id}")]
@@ -26,23 +26,27 @@ namespace WebAPISample.Controllers
         {
             return Ok(await studentService.Get(id));
         }
-        //[HttpPost]
-        //public async Task<ActionResult> Post([FromBody] Student student)
-        //{
-        //    var studentDTO = await studentService.Post(student);
-        //    return CreatedAtAction("Post", studentDTO);
-        //}
-        //[HttpPut]
-        //public ActionResult Put([FromBody] Student student)
-        //{
-        //    studentService.Put(student);
-        //    return NoContent();
-        //}
-        //[HttpDelete("{id}")]
-        //public ActionResult Delete(int id) 
-        //{ 
-        //    studentService.Delete(id);
-        //    return NoContent();
-        //}
+        [HttpPost]
+        public async Task<ActionResult> Post([FromBody] StudentDTO student)
+        {
+            var studentDTO = await studentService.Post(student);
+            return CreatedAtAction("Post", studentDTO);
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromBody] StudentDTO student)
+        {
+            var result = await studentService.Put(id, student);
+            if (result != null)
+            {
+                return NoContent();
+            }
+            return BadRequest();
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await studentService.Delete(id);
+            return NoContent();
+        }
     }
 }

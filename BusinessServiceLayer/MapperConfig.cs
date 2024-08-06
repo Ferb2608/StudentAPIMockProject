@@ -13,6 +13,7 @@ namespace BusinessServiceLayer
         public MapperConfig()
         {
             CreateMap<Student, StudentDTO>().ForMember(dest => dest.GradeValue, opt => opt.MapFrom(src => src.Grade.GradeValue));
+            CreateMap<StudentDTO, Student>();
         }
     }
 }
