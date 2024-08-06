@@ -1,12 +1,16 @@
-﻿using RepositoryLayer;
+﻿using AutoMapper;
+using RepositoryLayer;
 
 namespace BusinessServiceLayer
 {
-  public class StudentService : BaseService<Student, StudentDTO>
+  public class StudentService
   {
-        public StudentService(StudentRepository studentRepository) : base(studentRepository)
+        StudentRepository studentRepository;
+        private readonly IMapper mapper;
+        public StudentService(StudentRepository studentRepository, IMapper mapper)
         {
-
+            this.studentRepository = studentRepository;
+            this.mapper = mapper;
         }
 
         //public StudentService(StudentRepository studentRepository)
@@ -26,10 +30,12 @@ namespace BusinessServiceLayer
         //    return dtos;
         //}
 
-        //public async Task<StudentDTO> Get(int id)
-        //{
-        //  var student = await studentRepository.Get(id: id);
-        //  return new StudentDTO(student.Id, student.FirstName, student.LastName, student.Phone);
-        //}
+        public async Task<StudentDTO> Get(int id)
+        {
+            var student = await studentRepository.Get(id: id, s => s.Grade);
+            //return new StudentDTO(student.Id, student.FirstName, student.LastName, student.Phone);
+            var studentDto = mapper.Map<StudentDTO>(student);
+            return studentDto;
+        }
     }
 }

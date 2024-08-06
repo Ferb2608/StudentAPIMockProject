@@ -7,6 +7,7 @@
     public string LastName { get; set; }
     public string Phone { get; set; }
     public string FullName => FirstName + " " + LastName;
+    public string GradeValue { get; set; }
 
     public StudentDTO(int id, string firstname, string lastname, string phone)
     {

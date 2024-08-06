@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RepositoryLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace BusinessServiceLayer
 {
-    public class MapperConfig<S, D> : Profile
+    public class MapperConfig :  Profile
     {
         public MapperConfig()
         {
-            CreateMap<S, D>().ReverseMap();
+            CreateMap<Student, StudentDTO>().ForMember(dest => dest.GradeValue, opt => opt.MapFrom(src => src.Grade.GradeValue));
         }
     }
 }
