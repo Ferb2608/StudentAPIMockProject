@@ -28,12 +28,8 @@ namespace WebAPISample
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My Api", Version = "v1" });
             });
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                // Add all generic profiles dynamically
-                AddAllGenericMapperConfigs(mc);
-            });
-            
+
+            var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile(new MapperConfig()); });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
@@ -62,18 +58,6 @@ namespace WebAPISample
 
             app.Run();
         }
-        private static void AddAllGenericMapperConfigs(IMapperConfigurationExpression mc)
-        {
-            var profiles = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(MapperConfig<,>));
-
-            foreach (var profile in profiles)
-            {
-                var genericArguments = profile.BaseType.GetGenericArguments();
-                var profileInstance = Activator.CreateInstance(profile.MakeGenericType(genericArguments));
-                mc.AddProfile((Profile)profileInstance);
-            }
-        }
+        
     }
 }

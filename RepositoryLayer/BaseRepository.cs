@@ -34,7 +34,17 @@ namespace RepositoryLayer
             return await query.ToListAsync();
         }
 
-        public virtual async Task<T> Get(object id) => await dbSet.FindAsync(id);
+        public virtual async Task<T> Get(int id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+        }
 
         public virtual async Task<T> Post(T entity)
         {
@@ -49,7 +59,7 @@ namespace RepositoryLayer
             dbContext.SaveChanges();
         }
 
-        public virtual async void Delete(object id)
+        public virtual async void Delete(int id)
         {
             dbSet.Remove(await Get(id));
             dbContext.SaveChanges();
