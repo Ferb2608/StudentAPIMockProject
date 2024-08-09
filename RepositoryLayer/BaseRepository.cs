@@ -55,7 +55,7 @@ namespace RepositoryLayer
         public virtual async Task<T> Post(T entity)
         {
             await dbSet.AddAsync(entity);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
             return entity;
         }
 

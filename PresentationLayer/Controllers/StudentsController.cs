@@ -27,13 +27,13 @@ namespace WebAPISample.Controllers
             return Ok(await studentService.Get(id));
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] StudentDTO student)
+        public async Task<ActionResult> Post([FromBody] StudentInputDTO student)
         {
             var studentDTO = await studentService.Post(student);
             return CreatedAtAction("Post", studentDTO);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] StudentDTO student)
+        public async Task<ActionResult> Put(int id, [FromBody] StudentInputDTO student)
         {
             var result = await studentService.Put(id, student);
             if (result != null)

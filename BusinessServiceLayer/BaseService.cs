@@ -39,9 +39,9 @@ namespace BusinessServiceLayer
         {
             baseRepository.Put(entity);
         }
-        public void Delete(int id)
+        public async void Delete(int id)
         {
-            baseRepository.Delete(id);
+           await baseRepository.Delete(id);
         }
     }
 }

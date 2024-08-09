@@ -26,7 +26,9 @@ namespace WebAPISample
 
             builder.Services.AddScoped<StudentRepository>();
             builder.Services.AddScoped<StudentService>();
+            builder.Services.AddScoped<StudentAddressService>();
             builder.Services.AddScoped<GradeRepository>();
+            builder.Services.AddScoped<StudentAddressRepository>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
