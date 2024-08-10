@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace RepositoryLayer
@@ -13,7 +14,6 @@ namespace RepositoryLayer
             this.dbContext = dbContext;
             dbSet = this.dbContext.Set<T>();
         }
-
         public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null,
                                   Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                                   int pageNumber = 1,
@@ -49,9 +49,10 @@ namespace RepositoryLayer
                 query = query.Include(include);
             }
 
-            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            var entity = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+            
+            return entity;
         }
-
         public virtual async Task<T> Post(T entity)
         {
             await dbSet.AddAsync(entity);
