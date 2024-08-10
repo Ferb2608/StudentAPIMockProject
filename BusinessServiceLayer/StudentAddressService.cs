@@ -29,5 +29,10 @@ namespace BusinessServiceLayer
 
             return dtos;
         }
+        public async Task<AddressDTO> Get(int id)
+        {
+            var address = await studentAddressRepository.Get(id);
+            return mapper.Map<AddressDTO>(address);
+        }
     }
 }

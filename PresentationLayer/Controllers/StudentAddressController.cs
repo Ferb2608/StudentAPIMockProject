@@ -18,5 +18,10 @@ namespace PresentationLayer.Controllers
         {
             return Ok(await studentAddressService.Get(pageNumber: pageNumber, pageSize: pageSize));
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(int id)
+        {
+            return Ok(await studentAddressService.Get(id));
+        }
     }
 }

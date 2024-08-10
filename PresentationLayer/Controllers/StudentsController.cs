@@ -20,10 +20,10 @@ namespace WebAPISample.Controllers
             return Ok(await studentService.Get(pageNumber: pageNumber, pageSize: pageSize));
         }
 
-        //GET api/<StudentsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
+            var student = await studentService.Get(id);
             return Ok(await studentService.Get(id));
         }
         [HttpPost]

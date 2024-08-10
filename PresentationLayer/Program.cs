@@ -3,6 +3,7 @@ using BusinessServiceLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PresentationLayer;
+using PresentationLayer.ExceptionHandler;
 using RepositoryLayer;
 using System.Configuration;
 using System.Reflection;
@@ -23,10 +24,11 @@ namespace WebAPISample
                 options.UseSqlServer(connectionString);
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
-
+            builder.Services.AddExceptionHandler<AppExceptionHandler>();
             builder.Services.AddScoped<StudentRepository>();
             builder.Services.AddScoped<StudentService>();
             builder.Services.AddScoped<StudentAddressService>();
+            builder.Services.AddScoped<GradeService>();
             builder.Services.AddScoped<GradeRepository>();
             builder.Services.AddScoped<StudentAddressRepository>();
             builder.Services.AddControllers();
@@ -57,6 +59,7 @@ namespace WebAPISample
 
             app.UseAuthorization();
 
+            app.UseExceptionHandler(_ => { });
 
             app.MapControllers();
 
