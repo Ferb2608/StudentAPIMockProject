@@ -40,4 +40,13 @@ namespace BusinessServiceLayer.DTO
         public string GradeValue { get; set; }
         public AddressDTO Address { get; set; }
     }
+    public class GradeOutputDTO
+    {
+        public int Id { get; set; }
+        public string GradeValue { get; set; }
+    }
+    public class GradeInputDTO
+    {
+        public string GradeValue { get; set; }
+    }
 }

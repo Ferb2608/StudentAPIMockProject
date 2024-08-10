@@ -2,17 +2,19 @@
 {
     public class ErrorModel
     {
-        public string Destination { get; set; }
+        public int StatusCode { get; set; }
         public string Source { get; set; }
         public string Message { get; set; }
-        public string? Stacktrace { get; set; }
-
-        public ErrorModel(string destination, string source, string message, string? stacktrace)
+        
+        public ErrorModel()
         {
-            Destination = destination;
+            
+        }
+        public ErrorModel(int statusCode, string source, string message)
+        {
+            StatusCode = statusCode;
             Source = source;
             Message = message;
-            Stacktrace = stacktrace;
         }
     }
 }
