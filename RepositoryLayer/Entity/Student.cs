@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RepositoryLayer
+namespace RepositoryLayer.Entity
 {
     public class Student
     {
@@ -13,13 +13,14 @@ namespace RepositoryLayer
         public string Phone { get; set; }
         [ForeignKey("GradeId")]
         public virtual Grade Grade { get; set; }
-       
+
         public int GradeId { get; set; }
         [ForeignKey("AddressId")]
         public virtual StudentAddress Address { get; set; }
-        
+
         public int AddressId;
 
+        public ICollection<StudentInCourse> Courses { get; set; }
         public Student() { }
 
         public Student(string firstname, string lastname, string phone)
@@ -34,7 +35,7 @@ namespace RepositoryLayer
             FirstName = firstname;
             LastName = lastname;
             Phone = phone;
-            this.Address = studentAddress;
+            Address = studentAddress;
         }
     }
 }

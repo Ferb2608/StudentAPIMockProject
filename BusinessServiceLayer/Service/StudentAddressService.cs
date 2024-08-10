@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using RepositoryLayer;
+using BusinessServiceLayer.DTO;
+using RepositoryLayer.EntityRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessServiceLayer
+namespace BusinessServiceLayer.Service
 {
     public class StudentAddressService
     {
@@ -16,7 +17,7 @@ namespace BusinessServiceLayer
         {
             this.studentAddressRepository = studentAddressRepository;
             this.mapper = mapper;
-        }   
+        }
         public async Task<IEnumerable<AddressDTO>> Get(int pageNumber = 1, int pageSize = 10)
         {
             var dtos = new List<AddressDTO>();

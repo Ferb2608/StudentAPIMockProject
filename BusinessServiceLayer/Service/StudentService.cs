@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using BusinessServiceLayer.DTO;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer;
+using RepositoryLayer.Entity;
+using RepositoryLayer.EntityRepo;
 
-namespace BusinessServiceLayer
+namespace BusinessServiceLayer.Service
 {
     public class StudentService
     {
@@ -75,7 +78,8 @@ namespace BusinessServiceLayer
                 grade = new Grade(studentInputDTO.GradeValue);
                 grade = await gradeRepository.Post(grade);
                 student.Grade = grade;
-            } else
+            }
+            else
             {
                 _context.Entry(grade).State = EntityState.Unchanged;
             }
@@ -83,7 +87,7 @@ namespace BusinessServiceLayer
             var addressUpdate = mapper.Map<StudentAddress>(studentInputDTO.Address);
             addressUpdate.Id = student.AddressId;
             student = mapper.Map<Student>(studentInputDTO);
-            student.Id = id;
+            //student.Id = id;
             student.Address = addressUpdate;
             student.GradeId = grade.Id;
             studentRepository.Put(student);

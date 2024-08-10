@@ -7,7 +7,7 @@
 namespace RepositoryLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class genDB : Migration
+    public partial class initDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

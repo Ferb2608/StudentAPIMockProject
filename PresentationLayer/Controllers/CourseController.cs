@@ -1,42 +1,42 @@
 ﻿using BusinessServiceLayer.DTO;
 using BusinessServiceLayer.Service;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer;
 
-namespace WebAPISample.Controllers
+namespace PresentationLayer.Controllers
 {
+
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class CourseController : ControllerBase
     {
-        private readonly StudentService studentService;
-        public StudentsController(StudentService studentService)
+        private readonly CourseService courseService;
+        public CourseController(CourseService courseService)
         {
-            this.studentService = studentService;
+            this.courseService = courseService;
         }
 
         [HttpGet]
         public async Task<ActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            return Ok(await studentService.Get(pageNumber: pageNumber, pageSize: pageSize));
+            return Ok(await courseService.Get(pageNumber: pageNumber, pageSize: pageSize));
         }
 
         //GET api/<StudentsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            return Ok(await studentService.Get(id));
+            return Ok(await courseService.Get(id));
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] StudentInputDTO student)
+        public async Task<ActionResult> Post([FromBody] CourseDTO course)
         {
-            var studentDTO = await studentService.Post(student);
+            var studentDTO = await courseService.Post(course);
             return CreatedAtAction("Post", studentDTO);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] StudentInputDTO student)
+        public async Task<ActionResult> Put(int id, [FromBody] CourseDTO course)
         {
-            var result = await studentService.Put(id, student);
+            var result = await courseService.Put(id, course);
             if (result != null)
             {
                 return NoContent();
@@ -46,7 +46,7 @@ namespace WebAPISample.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await studentService.Delete(id);
+            await courseService.Delete(id);
             return NoContent();
         }
     }

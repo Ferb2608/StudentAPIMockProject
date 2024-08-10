@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BusinessServiceLayer
+namespace BusinessServiceLayer.DTO
 {
     public class StudentDTO
     {
@@ -12,15 +12,15 @@ namespace BusinessServiceLayer
         public string GradeValue { get; set; }
         [JsonIgnore]
         public AddressDTO AddressDTO { get; set; }
-        public string Address 
+        public string Address
         { get => AddressDTO.Street + ", " + AddressDTO.City + ", " + AddressDTO.Province + ", " + AddressDTO.Country + ", " + AddressDTO.PostalCode; set { } }
 
         public StudentDTO() { }
         public StudentDTO(string firstname, string lastname, string phone)
         {
-            this.FirstName = firstname;
-            this.LastName = lastname;
-            this.Phone = phone;
+            FirstName = firstname;
+            LastName = lastname;
+            Phone = phone;
         }
     }
 
@@ -38,6 +38,6 @@ namespace BusinessServiceLayer
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string GradeValue { get; set; }
-        public AddressDTO Address { get; set;   }
+        public AddressDTO Address { get; set; }
     }
 }

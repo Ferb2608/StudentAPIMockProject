@@ -1,9 +1,11 @@
 using AutoMapper;
 using BusinessServiceLayer;
+using BusinessServiceLayer.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PresentationLayer;
 using RepositoryLayer;
+using RepositoryLayer.EntityRepo;
 using System.Configuration;
 using System.Reflection;
 
@@ -27,6 +29,9 @@ namespace WebAPISample
             builder.Services.AddScoped<StudentRepository>();
             builder.Services.AddScoped<StudentService>();
             builder.Services.AddScoped<StudentAddressService>();
+            builder.Services.AddScoped<CourseRepository>();
+            builder.Services.AddScoped<CourseService>();
+
             builder.Services.AddScoped<GradeRepository>();
             builder.Services.AddScoped<StudentAddressRepository>();
             builder.Services.AddControllers();

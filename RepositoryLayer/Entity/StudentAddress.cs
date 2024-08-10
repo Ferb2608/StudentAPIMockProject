@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RepositoryLayer
+namespace RepositoryLayer.Entity
 {
     public class StudentAddress
     {
@@ -20,12 +20,13 @@ namespace RepositoryLayer
         public string PostalCode { get; set; }
         public virtual Student Student { get; set; }
         public StudentAddress() { }
-        public StudentAddress(string street, string city, string province, string country, string postalCode) {
-            this.Street = street;
-            this.City = city;
-            this.Province = province;
-            this.Country = country;
-            this.PostalCode = postalCode;
+        public StudentAddress(string street, string city, string province, string country, string postalCode)
+        {
+            Street = street;
+            City = city;
+            Province = province;
+            Country = country;
+            PostalCode = postalCode;
         }
     }
 }

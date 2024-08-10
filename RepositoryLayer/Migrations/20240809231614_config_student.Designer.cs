@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer;
 
@@ -10,9 +11,11 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20240809231614_config_student")]
+    partial class config_student
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,23 +23,6 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("RepositoryLayer.Entity.Course", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CourseName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
 
             modelBuilder.Entity("RepositoryLayer.Entity.Grade", b =>
                 {
@@ -163,29 +149,6 @@ namespace RepositoryLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RepositoryLayer.Entity.StudentInCourse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentInCourses");
-                });
-
             modelBuilder.Entity("RepositoryLayer.Entity.Student", b =>
                 {
                     b.HasOne("RepositoryLayer.Entity.StudentAddress", "Address")
@@ -203,35 +166,6 @@ namespace RepositoryLayer.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Grade");
-                });
-
-            modelBuilder.Entity("RepositoryLayer.Entity.StudentInCourse", b =>
-                {
-                    b.HasOne("RepositoryLayer.Entity.Course", "Course")
-                        .WithMany("Students")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RepositoryLayer.Entity.Student", "Student")
-                        .WithMany("Courses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("RepositoryLayer.Entity.Course", b =>
-                {
-                    b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("RepositoryLayer.Entity.Student", b =>
-                {
-                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.StudentAddress", b =>

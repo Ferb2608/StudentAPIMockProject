@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using RepositoryLayer.Entity;
 
 namespace RepositoryLayer
 {
@@ -16,7 +18,9 @@ namespace RepositoryLayer
         public DbSet<Student> Students { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<StudentAddress> StudentAddress { get; set; }
-
+        //public DbSet<Class> Classes { get; set; }
+        public DbSet<Course> Courses{ get; set; }
+        public DbSet<StudentInCourse> StudentInCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,7 +55,6 @@ namespace RepositoryLayer
             modelBuilder.Entity<StudentAddress>().HasData(address1);
             modelBuilder.Entity<Student>().HasData(new Student { Id = 1, FirstName = "Hieu", LastName = "Cao", Phone = "055555555", GradeId = grade1.Id, AddressId = address1.Id });
         }
-
     }
 
 

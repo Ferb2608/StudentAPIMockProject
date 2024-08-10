@@ -11,8 +11,8 @@ using RepositoryLayer;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20240809150943_genDB")]
-    partial class genDB
+    [Migration("20240809222304_initDB")]
+    partial class initDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
