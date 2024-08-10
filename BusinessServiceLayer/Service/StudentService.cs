@@ -10,6 +10,7 @@ namespace BusinessServiceLayer.Service
     public class StudentService
     {
         private readonly StudentRepository studentRepository;
+        private readonly CourseRepository courseRepository;
         private readonly GradeRepository gradeRepository;
         private readonly StudentAddressRepository studentAddressRepository;
         private readonly SchoolContext _context;
@@ -49,6 +50,7 @@ namespace BusinessServiceLayer.Service
             StudentAddress studentAddress = mapper.Map<StudentAddress>(studentInputDTO.Address);
             var student = mapper.Map<Student>(studentInputDTO);
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
+            var course = await courseRepository.GetByProperty(t => t.Id == studentInputDTO.Course.CourseId);
             var grade = grades.FirstOrDefault();
 
             if (grade == null)
@@ -60,7 +62,14 @@ namespace BusinessServiceLayer.Service
             {
                 _context.Entry(grade).State = EntityState.Unchanged;
             }
-
+            //if(course != null)
+            //{
+            //    var courseTemp = mapper.Map<Course>(studentInputDTO.Course);
+            //    StudentInCourse studentInCourse = new StudentInCourse();
+            //    studentInCourse.Id = studentInputDTO.Course.
+            //    course = mapper.Map<Course>(courseTemp);
+            //    student.Courses.Add(courseTemp);
+            //}
             student.GradeId = grade.Id;
             var address = await studentAddressRepository.Post(studentAddress);
             student.Address = address;

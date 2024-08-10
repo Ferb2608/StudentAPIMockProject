@@ -21,11 +21,11 @@ namespace WebAPISample
             // Add services to the container.
             builder.Services.AddRazorPages();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<SchoolContext>(options => 
+            builder.Services.AddDbContext<SchoolContext>(options =>
              {
-                options.UseSqlServer(connectionString);
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
+                 options.UseSqlServer(connectionString, b => b.MigrationsAssembly("PresentationLayer"));
+                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+             });
             builder.Services.AddExceptionHandler<AppExceptionHandler>();
             builder.Services.AddScoped<StudentRepository>();
             builder.Services.AddScoped<StudentService>();
@@ -72,6 +72,6 @@ namespace WebAPISample
 
             app.Run();
         }
-        
+
     }
 }

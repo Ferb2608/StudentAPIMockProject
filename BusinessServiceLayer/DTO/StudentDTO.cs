@@ -10,6 +10,7 @@ namespace BusinessServiceLayer.DTO
         public string Phone { get; set; }
         public string FullName => FirstName + " " + LastName;
         public string GradeValue { get; set; }
+        public CourseDTO Course { get; set; }
         [JsonIgnore]
         public AddressDTO AddressDTO { get; set; }
         public string Address
@@ -39,6 +40,7 @@ namespace BusinessServiceLayer.DTO
         public string Phone { get; set; }
         public string GradeValue { get; set; }
         public AddressDTO Address { get; set; }
+        public InputCourseDTO? Course { get; set; }
     }
     public class GradeOutputDTO
     {

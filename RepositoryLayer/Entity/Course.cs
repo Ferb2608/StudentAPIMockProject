@@ -15,10 +15,10 @@ namespace RepositoryLayer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string CourseName { get; set; }
-        public ICollection<StudentInCourse> Students
+        public ICollection<StudentInCourse>? Students
         {
             get; set;
-        }
+        } 
     }
 }
 

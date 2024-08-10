@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using BusinessServiceLayer.DTO;
 using RepositoryLayer;
+using RepositoryLayer.Entity;
+using RepositoryLayer.EntityRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
