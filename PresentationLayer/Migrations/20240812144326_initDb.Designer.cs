@@ -8,11 +8,11 @@ using RepositoryLayer;
 
 #nullable disable
 
-namespace RepositoryLayer.Migrations
+namespace PresentationLayer.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20240809222304_initDB")]
-    partial class initDB
+    [Migration("20240812144326_initDb")]
+    partial class initDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,24 @@ namespace RepositoryLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RepositoryLayer.Grade", b =>
+            modelBuilder.Entity("RepositoryLayer.Entity.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entity.Grade", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,9 +51,12 @@ namespace RepositoryLayer.Migrations
 
                     b.Property<string>("GradeValue")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GradeValue")
+                        .IsUnique();
 
                     b.ToTable("Grades");
 
@@ -58,7 +78,7 @@ namespace RepositoryLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RepositoryLayer.Student", b =>
+            modelBuilder.Entity("RepositoryLayer.Entity.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,7 +125,7 @@ namespace RepositoryLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RepositoryLayer.StudentAddress", b =>
+            modelBuilder.Entity("RepositoryLayer.Entity.StudentAddress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -149,15 +169,39 @@ namespace RepositoryLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("RepositoryLayer.Student", b =>
+            modelBuilder.Entity("RepositoryLayer.Entity.StudentInCourse", b =>
                 {
-                    b.HasOne("RepositoryLayer.StudentAddress", "Address")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("StudentInCourses");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entity.Student", b =>
+                {
+                    b.HasOne("RepositoryLayer.Entity.StudentAddress", "Address")
                         .WithOne("Student")
-                        .HasForeignKey("RepositoryLayer.Student", "AddressId")
+                        .HasForeignKey("RepositoryLayer.Entity.Student", "AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RepositoryLayer.Grade", "Grade")
+                    b.HasOne("RepositoryLayer.Entity.Grade", "Grade")
                         .WithMany()
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -168,7 +212,36 @@ namespace RepositoryLayer.Migrations
                     b.Navigation("Grade");
                 });
 
-            modelBuilder.Entity("RepositoryLayer.StudentAddress", b =>
+            modelBuilder.Entity("RepositoryLayer.Entity.StudentInCourse", b =>
+                {
+                    b.HasOne("RepositoryLayer.Entity.Course", "Course")
+                        .WithMany("Students")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RepositoryLayer.Entity.Student", "Student")
+                        .WithMany("Courses")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entity.Course", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entity.Student", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Entity.StudentAddress", b =>
                 {
                     b.Navigation("Student")
                         .IsRequired();

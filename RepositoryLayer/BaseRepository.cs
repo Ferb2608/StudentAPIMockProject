@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace RepositoryLayer
@@ -14,40 +15,58 @@ namespace RepositoryLayer
             this.dbContext = dbContext;
             dbSet = this.dbContext.Set<T>();
         }
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null,
-                                  Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-                                  int pageNumber = 1,
-                                  int pageSize = 10, params Expression<Func<T, object>>[] includes)
+        //public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null,
+        //                          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        //                          int pageNumber = 1,
+        //                          int pageSize = 10, params Expression<Func<T, object>>[] includes)
+        //{
+        //    IQueryable<T> query = dbSet;
+
+        //    //Searching/Filtering
+        //    if (filter != null)
+        //        query = query.Where(filter);
+
+        //    //Sorting
+        //    if (orderBy != null)
+        //        query = orderBy(query);
+
+        //    //Paging
+        //    query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+        //    foreach (var include in includes)
+        //    {
+        //        query = query.Include(include);
+        //    }
+
+        //    return await query.ToListAsync();
+        //}
+        public async Task<IEnumerable<T>> Get(
+                                              Expression<Func<T, bool>> filter = null,
+                                              Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                              int pageNumber = 1,
+                                              int pageSize = 10,
+                                              Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                              bool disableTracking = true)
         {
             IQueryable<T> query = dbSet;
 
-            //Searching/Filtering
-            if (filter != null)
-                query = query.Where(filter);
+            query = disableTracking ? query.AsNoTracking() : query.AsTracking();
 
-            //Sorting
-            if (orderBy != null)
-                query = orderBy(query);
+            if (include != null) query = include(query);
 
-            //Paging
+            if (filter != null) query = query.Where(filter);
+
+            if (orderBy != null) _ = orderBy(query);
+
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
 
             return await query.ToListAsync();
         }
-
-        public virtual async Task<T> Get(int id, params Expression<Func<T, object>>[] includes)
+        public virtual async Task<T> Get(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = dbSet;
 
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
+            if (include != null) query = include(query);
 
             var entity = await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
             

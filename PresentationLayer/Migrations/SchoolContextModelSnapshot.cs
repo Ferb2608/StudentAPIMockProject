@@ -48,9 +48,12 @@ namespace PresentationLayer.Migrations
 
                     b.Property<string>("GradeValue")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GradeValue")
+                        .IsUnique();
 
                     b.ToTable("Grades");
 
@@ -181,7 +184,8 @@ namespace PresentationLayer.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique();
 
                     b.ToTable("StudentInCourses");
                 });

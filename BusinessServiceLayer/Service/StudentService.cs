@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using RepositoryLayer;
 using RepositoryLayer.Entity;
 using RepositoryLayer.EntityRepo;
+using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace BusinessServiceLayer.Service
 {
@@ -15,21 +17,24 @@ namespace BusinessServiceLayer.Service
         private readonly StudentAddressRepository studentAddressRepository;
         private readonly SchoolContext _context;
         private readonly IMapper mapper;
+        private readonly StudentInCourseRepository studentInCourseRepository;
         public StudentService(StudentRepository studentRepository, IMapper mapper, GradeRepository gradeRepository,
-            StudentAddressRepository studentAddressRepository, SchoolContext context)
+            StudentAddressRepository studentAddressRepository, SchoolContext context, StudentInCourseRepository studentInCourseRepository, CourseRepository courseRepository)
         {
             this.studentRepository = studentRepository;
             this.mapper = mapper;
             this.gradeRepository = gradeRepository;
             this.studentAddressRepository = studentAddressRepository;
             _context = context;
+            this.studentInCourseRepository = studentInCourseRepository;
+            this.courseRepository = courseRepository;
         }
 
         public async Task<IEnumerable<StudentDTO>> Get(int pageNumber = 1, int pageSize = 10)
         {
             var dtos = new List<StudentDTO>();
-            var entities = await studentRepository.Get(null, q => q.OrderByDescending(s => s.Id), pageNumber: pageNumber, pageSize: pageSize,
-                                                s => s.Grade, s => s.Address);
+            var entities = await studentRepository.Get(null, q => q.OrderByDescending(s => s.Id), pageNumber, pageSize, s => s.Include(s => s.Address).Include(s => s.Grade).Include(s => s.Courses).ThenInclude(st => st.Course));
+
             foreach (var entity in entities)
             {
                 var studentDto = mapper.Map<StudentDTO>(entity);
@@ -41,7 +46,7 @@ namespace BusinessServiceLayer.Service
 
         public async Task<StudentDTO> Get(int id)
         {
-            var student = await studentRepository.Get(id: id, s => s.Grade, s => s.Address);
+            var student = await studentRepository.Get(id, s => s.Include(s => s.Address).Include(s => s.Grade).Include(s => s.Courses).ThenInclude(st => st.Course));
             var studentDto = mapper.Map<StudentDTO>(student);
             return studentDto;
         }
@@ -50,7 +55,6 @@ namespace BusinessServiceLayer.Service
             StudentAddress studentAddress = mapper.Map<StudentAddress>(studentInputDTO.Address);
             var student = mapper.Map<Student>(studentInputDTO);
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
-            var course = await courseRepository.GetByProperty(t => t.Id == studentInputDTO.Course.CourseId);
             var grade = grades.FirstOrDefault();
 
             if (grade == null)
@@ -62,14 +66,7 @@ namespace BusinessServiceLayer.Service
             {
                 _context.Entry(grade).State = EntityState.Unchanged;
             }
-            //if(course != null)
-            //{
-            //    var courseTemp = mapper.Map<Course>(studentInputDTO.Course);
-            //    StudentInCourse studentInCourse = new StudentInCourse();
-            //    studentInCourse.Id = studentInputDTO.Course.
-            //    course = mapper.Map<Course>(courseTemp);
-            //    student.Courses.Add(courseTemp);
-            //}
+            
             student.GradeId = grade.Id;
             var address = await studentAddressRepository.Post(studentAddress);
             student.Address = address;
@@ -78,7 +75,7 @@ namespace BusinessServiceLayer.Service
         }
         public async Task<StudentDTO> Put(int id, StudentInputDTO studentInputDTO)
         {
-            var student = await studentRepository.Get(id, s => s.Grade, s => s.Address);
+            var student = await studentRepository.Get(id, s => s.Include(s => s.Address).Include(s => s.Grade).Include(s => s.Courses).ThenInclude(st => st.Course));
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
             var grade = grades.FirstOrDefault();
             if (student == null) return null;
@@ -110,6 +107,49 @@ namespace BusinessServiceLayer.Service
             var addressId = student.AddressId;
             await studentRepository.Delete(id);
             await studentAddressRepository.Delete(addressId);
+        }
+        public async Task<StudentInCourseInputDTO> AddStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        {
+            var student = await studentRepository.Get(studentInCourseInputDTO.StudentId);
+            var course = await courseRepository.Get(studentInCourseInputDTO.CourseId);
+            if (course == null || student == null) return null;
+            var studentInCourses = await studentInCourseRepository.
+                GetByProperty(sc => sc.StudentId == studentInCourseInputDTO.StudentId && sc.CourseId == studentInCourseInputDTO.CourseId);
+            if (studentInCourses.FirstOrDefault() != null) return null;
+            _context.Entry(student).State = EntityState.Unchanged;
+            _context.Entry(course).State = EntityState.Unchanged;
+            var studentInCourse = mapper.Map<StudentInCourse>(studentInCourseInputDTO);
+            studentInCourse = await studentInCourseRepository.Post(studentInCourse);
+            return mapper.Map<StudentInCourseInputDTO>(studentInCourse);
+        }
+        //public async Task<StudentInCourseInputDTO> UpdateStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        //{
+        //    var student = await studentRepository.Get(studentInCourseInputDTO.StudentId);
+        //    var course = await courseRepository.Get(studentInCourseInputDTO.CourseId);
+        //    if (course == null || student == null) return null;
+        //    var studentInCourses = await studentInCourseRepository.
+        //        GetByProperty(sc => sc.StudentId == studentInCourseInputDTO.StudentId && sc.CourseId == studentInCourseInputDTO.CourseId);
+        //    _context.Entry(student).State = EntityState.Unchanged;
+        //    _context.Entry(course).State = EntityState.Unchanged;
+        //    var studentInCourse = mapper.Map<StudentInCourse>(studentInCourseInputDTO);
+        //    if (studentInCourses.FirstOrDefault() != null)
+        //    {
+        //        await studentInCourseRepository.Delete(studentInCourses.FirstOrDefault().Id);
+        //    }
+        //    studentInCourse = await studentInCourseRepository.Post(studentInCourse);
+            
+        //    return mapper.Map<StudentInCourseInputDTO>(studentInCourse);
+        //}
+        public async Task RemoveStudentOutOfCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        {
+            var student = await studentRepository.Get(studentInCourseInputDTO.StudentId);
+            var course = await courseRepository.Get(studentInCourseInputDTO.CourseId);
+            if (course == null || student == null) return;
+            var studentInCourses = await studentInCourseRepository.
+                GetByProperty(sc => sc.StudentId == studentInCourseInputDTO.StudentId && sc.CourseId == studentInCourseInputDTO.CourseId);
+            var studentInCourse = studentInCourses.FirstOrDefault();
+            if (studentInCourse == null) return;
+            await studentInCourseRepository.Delete(studentInCourse.Id);
         }
     }
 }

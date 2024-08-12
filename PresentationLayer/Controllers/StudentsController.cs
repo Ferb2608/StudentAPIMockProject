@@ -49,5 +49,23 @@ namespace WebAPISample.Controllers
             await studentService.Delete(id);
             return NoContent();
         }
+        [HttpPost("addStudentIntoCourse")]
+        public async Task<ActionResult> AddStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        {
+            var studentInCourse = await studentService.AddStudentIntoCourse(studentInCourseInputDTO);
+            return CreatedAtAction("AddStudentIntoCourse", studentInCourse);
+        }
+        //[HttpPut("updateStudentIntoCourse")]
+        //public async Task<ActionResult> UpdateStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        //{
+        //    var studentInCourse = await studentService.UpdateStudentIntoCourse(studentInCourseInputDTO);
+        //    return NoContent();
+        //}
+        [HttpDelete("removeStudentOutOfCourse")]
+        public async Task<ActionResult> RemoveStudentOutOfCourse(StudentInCourseInputDTO studentInCourseInputDTO)
+        {
+            await studentService.RemoveStudentOutOfCourse(studentInCourseInputDTO);
+            return NoContent();
+        }
     }
 }

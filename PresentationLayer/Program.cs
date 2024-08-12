@@ -9,6 +9,7 @@ using RepositoryLayer;
 using RepositoryLayer.EntityRepo;
 using System.Configuration;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace WebAPISample
 {
@@ -35,6 +36,7 @@ namespace WebAPISample
             builder.Services.AddScoped<GradeService>();
             builder.Services.AddScoped<GradeRepository>();
             builder.Services.AddScoped<StudentAddressRepository>();
+            builder.Services.AddScoped<StudentInCourseRepository>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -45,7 +47,8 @@ namespace WebAPISample
             var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile(new MapperConfig()); });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
-
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

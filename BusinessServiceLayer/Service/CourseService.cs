@@ -62,7 +62,7 @@ namespace BusinessServiceLayer.Service
         }
         public async Task Delete(int id)
         {
-            var student = await courseRepository.Get(id);
+            var course = await courseRepository.Get(id);
             await courseRepository.Delete(id);
         }
     }

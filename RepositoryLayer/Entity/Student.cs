@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace RepositoryLayer.Entity
 {
@@ -19,8 +20,8 @@ namespace RepositoryLayer.Entity
         public virtual StudentAddress Address { get; set; }
 
         public int AddressId;
-
-        public ICollection<StudentInCourse> Courses { get; set; }
+        [InverseProperty(nameof(StudentInCourse.Student))]
+        public virtual ICollection<StudentInCourse> Courses { get; set; }
         public Student() { }
 
         public Student(string firstname, string lastname, string phone)

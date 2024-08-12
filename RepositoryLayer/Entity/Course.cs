@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace RepositoryLayer.Entity
 {
@@ -15,7 +16,8 @@ namespace RepositoryLayer.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string CourseName { get; set; }
-        public ICollection<StudentInCourse>? Students
+        [InverseProperty(nameof(StudentInCourse.Course))]
+        public virtual ICollection<StudentInCourse> Students
         {
             get; set;
         } 

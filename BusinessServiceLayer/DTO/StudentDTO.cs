@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using RepositoryLayer.Entity;
+using System.Text.Json.Serialization;
 
 namespace BusinessServiceLayer.DTO
 {
@@ -10,12 +11,11 @@ namespace BusinessServiceLayer.DTO
         public string Phone { get; set; }
         public string FullName => FirstName + " " + LastName;
         public string GradeValue { get; set; }
-        public CourseDTO Course { get; set; }
         [JsonIgnore]
         public AddressDTO AddressDTO { get; set; }
         public string Address
         { get => AddressDTO.Street + ", " + AddressDTO.City + ", " + AddressDTO.Province + ", " + AddressDTO.Country + ", " + AddressDTO.PostalCode; set { } }
-
+        public ICollection<StudentInCourseDTO> Courses { get; set; }
         public StudentDTO() { }
         public StudentDTO(string firstname, string lastname, string phone)
         {
@@ -40,7 +40,6 @@ namespace BusinessServiceLayer.DTO
         public string Phone { get; set; }
         public string GradeValue { get; set; }
         public AddressDTO Address { get; set; }
-        public InputCourseDTO? Course { get; set; }
     }
     public class GradeOutputDTO
     {
