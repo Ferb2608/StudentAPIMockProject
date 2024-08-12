@@ -75,7 +75,7 @@ namespace BusinessServiceLayer.Service
         }
         public async Task<StudentDTO> Put(int id, StudentInputDTO studentInputDTO)
         {
-            var student = await studentRepository.Get(id, s => s.Include(s => s.Address).Include(s => s.Grade).Include(s => s.Courses).ThenInclude(st => st.Course));
+            var student = await studentRepository.Get(id, s => s.Include(s => s.Address).Include(s => s.Grade));
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
             var grade = grades.FirstOrDefault();
             if (student == null) return null;
@@ -93,7 +93,7 @@ namespace BusinessServiceLayer.Service
             var addressUpdate = mapper.Map<StudentAddress>(studentInputDTO.Address);
             addressUpdate.Id = student.AddressId;
             student = mapper.Map<Student>(studentInputDTO);
-            //student.Id = id;
+            student.Id = id;
             student.Address = addressUpdate;
             student.GradeId = grade.Id;
             studentRepository.Put(student);
