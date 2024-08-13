@@ -1,7 +1,8 @@
 ﻿using BusinessServiceLayer.DTO;
 using BusinessServiceLayer.Service;
+using BusinessServiceLayer.Validation;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer;
+using RepositoryLayer.Entity;
 
 namespace WebAPISample.Controllers
 {
@@ -25,23 +26,46 @@ namespace WebAPISample.Controllers
         public async Task<ActionResult> Get(int id)
         {
             var student = await studentService.Get(id);
-            return Ok(await studentService.Get(id));
+            if (student == null) return NotFound();
+            return Ok(student);
         }
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] StudentInputDTO student)
         {
             var studentDTO = await studentService.Post(student);
+            if (!string.IsNullOrEmpty(studentDTO.TypeError))
+            {
+                ValidationModel validationModel = null;
+                if (studentDTO.TypeError == ErrorConst.STUDENT_VALIDATION_PHONE)
+                {
+                    validationModel = new ValidationModel("Save student", "Phone number is " + student.Phone, "Phone number must be 10 digits and belong to VietNamese's phone number!");
+                }
+                else if (studentDTO.TypeError == ErrorConst.STUDENT_VALIDATION_GRADE_VALUE)
+                {
+                    validationModel = new ValidationModel("Save student", "Grade Value is " + student.GradeValue, "Grade Value must be 1-2 digits and less than 12!");
+                }
+                return BadRequest(validationModel);
+            }
             return CreatedAtAction("Post", studentDTO);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] StudentInputDTO student)
         {
-            var result = await studentService.Put(id, student);
-            if (result != null)
+            var studentDTO = await studentService.Put(id, student);
+            if (!string.IsNullOrEmpty(studentDTO.TypeError))
             {
-                return NoContent();
+                ValidationModel validationModel = null;
+                if (studentDTO.TypeError == ErrorConst.STUDENT_VALIDATION_PHONE)
+                {
+                    validationModel = new ValidationModel("Save student", "Phone number is " + student.Phone, "Phone number must be 10 digits and belong to VietNamese's phone number!");
+                }
+                else if (studentDTO.TypeError == ErrorConst.STUDENT_VALIDATION_GRADE_VALUE)
+                {
+                    validationModel = new ValidationModel("Save student", "Grade Value is " + student.GradeValue, "Grade Value must be 1-2 digits and less than 12!");
+                }
+                return BadRequest(validationModel);
             }
-            return BadRequest();
+            return NoContent();
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
@@ -53,14 +77,16 @@ namespace WebAPISample.Controllers
         public async Task<ActionResult> AddStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
         {
             var studentInCourse = await studentService.AddStudentIntoCourse(studentInCourseInputDTO);
+            if (studentInCourse == null)
+            {
+               ValidationModel validationModel = new ValidationModel
+                    ("Add Student into Course", "Student id: " + studentInCourseInputDTO.StudentId + "Course id: " + studentInCourseInputDTO.CourseId, 
+                    "Student id and Course id is not exist or Student already in this Course");
+                return BadRequest(validationModel);
+            }
             return CreatedAtAction("AddStudentIntoCourse", studentInCourse);
         }
-        //[HttpPut("updateStudentIntoCourse")]
-        //public async Task<ActionResult> UpdateStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
-        //{
-        //    var studentInCourse = await studentService.UpdateStudentIntoCourse(studentInCourseInputDTO);
-        //    return NoContent();
-        //}
+        
         [HttpDelete("removeStudentOutOfCourse")]
         public async Task<ActionResult> RemoveStudentOutOfCourse(StudentInCourseInputDTO studentInCourseInputDTO)
         {
