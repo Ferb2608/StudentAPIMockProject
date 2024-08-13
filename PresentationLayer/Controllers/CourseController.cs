@@ -21,20 +21,21 @@ namespace PresentationLayer.Controllers
             return Ok(await courseService.Get(pageNumber: pageNumber, pageSize: pageSize));
         }
 
-        //GET api/<StudentsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            return Ok(await courseService.Get(id));
+            var course = await courseService.Get(id);
+            if (course == null) return NotFound();
+            return Ok(course);
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CourseDTO course)
+        public async Task<ActionResult> Post([FromBody] InputCourseDTO course)
         {
             var studentDTO = await courseService.Post(course);
             return CreatedAtAction("Post", studentDTO);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] CourseDTO course)
+        public async Task<ActionResult> Put(int id, [FromBody] InputCourseDTO course)
         {
             var result = await courseService.Put(id, course);
             if (result != null)

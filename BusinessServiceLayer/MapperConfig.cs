@@ -26,6 +26,7 @@ namespace BusinessServiceLayer
             CreateMap<CourseDTO, Course>().ReverseMap();
             CreateMap<StudentInCourse, StudentInCourseDTO>().ReverseMap();
             CreateMap<StudentInCourseInputDTO, StudentInCourse>().ReverseMap();
+            CreateMap<Course, InputCourseDTO>().ReverseMap();
         }
     }
 }

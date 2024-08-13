@@ -1,7 +1,7 @@
-﻿using BusinessServiceLayer;
-using BusinessServiceLayer.DTO;
+﻿using BusinessServiceLayer.DTO;
+using BusinessServiceLayer.Service;
 using Microsoft.AspNetCore.Mvc;
-using RepositoryLayer;
+using WebAPISample;
 
 namespace PresentationLayer.Controllers
 {
@@ -22,12 +22,19 @@ namespace PresentationLayer.Controllers
         [HttpGet("id")]
         public async Task<ActionResult> Get(int id)
         {
-            return Ok(await gradeService.Get(id));
+            var grade = await gradeService.Get(id);
+            if (grade == null) return NotFound();
+            return Ok(grade);
         }
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] GradeInputDTO gradeInputDTO)
         {
             var studentDTO = await gradeService.Post(gradeInputDTO);
+            if (studentDTO == null)
+            {
+                ValidationModel validationModel = new ValidationModel("Save Grade", "Grade value is " + gradeInputDTO.GradeValue, "This grade value is already exist or not valid (2 digits and less than 12), please try again!");
+                return BadRequest(validationModel);
+            }
             return CreatedAtAction("Post", gradeInputDTO);
         }
         [HttpPut("{id}")]
@@ -38,7 +45,8 @@ namespace PresentationLayer.Controllers
             {
                 return NoContent();
             }
-            return BadRequest();
+            ValidationModel validationModel = new ValidationModel("Update Grade", "Grade value is " + gradeInputDTO.GradeValue, "This grade value is already exist or not valid (2 digits and less than 12), please try again!");
+            return BadRequest(validationModel);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)

@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessServiceLayer;
 using BusinessServiceLayer.Service;
+using BusinessServiceLayer.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PresentationLayer;
@@ -34,6 +35,7 @@ namespace WebAPISample
             builder.Services.AddScoped<CourseRepository>();
             builder.Services.AddScoped<CourseService>();
             builder.Services.AddScoped<GradeService>();
+            builder.Services.AddScoped<ValidationService>();
             builder.Services.AddScoped<GradeRepository>();
             builder.Services.AddScoped<StudentAddressRepository>();
             builder.Services.AddScoped<StudentInCourseRepository>();

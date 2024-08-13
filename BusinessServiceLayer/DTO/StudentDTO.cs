@@ -16,6 +16,8 @@ namespace BusinessServiceLayer.DTO
         public string Address
         { get => AddressDTO.Street + ", " + AddressDTO.City + ", " + AddressDTO.Province + ", " + AddressDTO.Country + ", " + AddressDTO.PostalCode; set { } }
         public ICollection<StudentInCourseDTO> Courses { get; set; }
+        [JsonIgnore]
+        public string TypeError { get; set; }
         public StudentDTO() { }
         public StudentDTO(string firstname, string lastname, string phone)
         {

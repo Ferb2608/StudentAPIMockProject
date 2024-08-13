@@ -45,16 +45,18 @@ namespace BusinessServiceLayer.Service
             var courseDto = mapper.Map<CourseDTO>(course);
             return courseDto;
         }
-        public async Task<CourseDTO> Post(CourseDTO courseDTO)
+        public async Task<CourseDTO> Post(InputCourseDTO courseDTO)
         {
             var course = mapper.Map<Course>(courseDTO);
             course = await courseRepository.Post(course);
             return mapper.Map<CourseDTO>(course);
         }
-        public async Task<CourseDTO> Put(int id, CourseDTO courseDTO)
+        public async Task<CourseDTO> Put(int id, InputCourseDTO courseDTO)
         {
             var course = await courseRepository.Get(id);
+            if (course == null) return null;
             course = mapper.Map<Course>(courseDTO);
+            course.Id = id;
             courseRepository.Put(course);
             course = await courseRepository.Get(id);
             var courseUpdate = mapper.Map<CourseDTO>(course);

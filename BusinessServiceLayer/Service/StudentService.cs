@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using BusinessServiceLayer.DTO;
+using BusinessServiceLayer.Validation;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer;
 using RepositoryLayer.Entity;
 using RepositoryLayer.EntityRepo;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace BusinessServiceLayer.Service
 {
@@ -18,8 +20,9 @@ namespace BusinessServiceLayer.Service
         private readonly SchoolContext _context;
         private readonly IMapper mapper;
         private readonly StudentInCourseRepository studentInCourseRepository;
+        private readonly ValidationService validationService;
         public StudentService(StudentRepository studentRepository, IMapper mapper, GradeRepository gradeRepository,
-            StudentAddressRepository studentAddressRepository, SchoolContext context, StudentInCourseRepository studentInCourseRepository, CourseRepository courseRepository)
+            StudentAddressRepository studentAddressRepository, SchoolContext context, StudentInCourseRepository studentInCourseRepository, CourseRepository courseRepository, ValidationService validationService)
         {
             this.studentRepository = studentRepository;
             this.mapper = mapper;
@@ -28,6 +31,7 @@ namespace BusinessServiceLayer.Service
             _context = context;
             this.studentInCourseRepository = studentInCourseRepository;
             this.courseRepository = courseRepository;
+            this.validationService = validationService;
         }
 
         public async Task<IEnumerable<StudentDTO>> Get(int pageNumber = 1, int pageSize = 10)
@@ -52,6 +56,7 @@ namespace BusinessServiceLayer.Service
         }
         public async Task<StudentDTO> Post(StudentInputDTO studentInputDTO)
         {
+            if (!validationService.ValidatePhoneNumber(studentInputDTO.Phone)) return new StudentDTO() { TypeError = ErrorConst.STUDENT_VALIDATION_PHONE };
             StudentAddress studentAddress = mapper.Map<StudentAddress>(studentInputDTO.Address);
             var student = mapper.Map<Student>(studentInputDTO);
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
@@ -59,6 +64,7 @@ namespace BusinessServiceLayer.Service
 
             if (grade == null)
             {
+                if (!validationService.ValidateGradeValue(studentInputDTO.GradeValue)) return new StudentDTO() { TypeError = ErrorConst.STUDENT_VALIDATION_GRADE_VALUE };
                 grade = new Grade(studentInputDTO.GradeValue);
                 grade = await gradeRepository.Post(grade);
             }
@@ -76,11 +82,13 @@ namespace BusinessServiceLayer.Service
         public async Task<StudentDTO> Put(int id, StudentInputDTO studentInputDTO)
         {
             var student = await studentRepository.Get(id, s => s.Include(s => s.Address).Include(s => s.Grade));
+            if (student == null) return null;
+            if (!validationService.ValidatePhoneNumber(studentInputDTO.Phone)) return new StudentDTO() { TypeError = ErrorConst.STUDENT_VALIDATION_PHONE };
             var grades = await gradeRepository.GetByProperty(t => t.GradeValue == studentInputDTO.GradeValue);
             var grade = grades.FirstOrDefault();
-            if (student == null) return null;
             if (grade == null)
             {
+                if (!validationService.ValidateGradeValue(studentInputDTO.GradeValue)) return new StudentDTO() { TypeError = ErrorConst.STUDENT_VALIDATION_GRADE_VALUE };
                 grade = new Grade(studentInputDTO.GradeValue);
                 grade = await gradeRepository.Post(grade);
                 student.Grade = grade;
@@ -89,7 +97,7 @@ namespace BusinessServiceLayer.Service
             {
                 _context.Entry(grade).State = EntityState.Unchanged;
             }
-            //studentDTO.Id = id;
+            
             var addressUpdate = mapper.Map<StudentAddress>(studentInputDTO.Address);
             addressUpdate.Id = student.AddressId;
             student = mapper.Map<Student>(studentInputDTO);
@@ -122,24 +130,6 @@ namespace BusinessServiceLayer.Service
             studentInCourse = await studentInCourseRepository.Post(studentInCourse);
             return mapper.Map<StudentInCourseInputDTO>(studentInCourse);
         }
-        //public async Task<StudentInCourseInputDTO> UpdateStudentIntoCourse(StudentInCourseInputDTO studentInCourseInputDTO)
-        //{
-        //    var student = await studentRepository.Get(studentInCourseInputDTO.StudentId);
-        //    var course = await courseRepository.Get(studentInCourseInputDTO.CourseId);
-        //    if (course == null || student == null) return null;
-        //    var studentInCourses = await studentInCourseRepository.
-        //        GetByProperty(sc => sc.StudentId == studentInCourseInputDTO.StudentId && sc.CourseId == studentInCourseInputDTO.CourseId);
-        //    _context.Entry(student).State = EntityState.Unchanged;
-        //    _context.Entry(course).State = EntityState.Unchanged;
-        //    var studentInCourse = mapper.Map<StudentInCourse>(studentInCourseInputDTO);
-        //    if (studentInCourses.FirstOrDefault() != null)
-        //    {
-        //        await studentInCourseRepository.Delete(studentInCourses.FirstOrDefault().Id);
-        //    }
-        //    studentInCourse = await studentInCourseRepository.Post(studentInCourse);
-            
-        //    return mapper.Map<StudentInCourseInputDTO>(studentInCourse);
-        //}
         public async Task RemoveStudentOutOfCourse(StudentInCourseInputDTO studentInCourseInputDTO)
         {
             var student = await studentRepository.Get(studentInCourseInputDTO.StudentId);

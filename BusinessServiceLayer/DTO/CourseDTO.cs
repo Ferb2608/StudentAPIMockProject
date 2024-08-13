@@ -17,6 +17,6 @@ namespace BusinessServiceLayer.DTO
     }
     public class InputCourseDTO
     {
-        public int CourseId { get; set; }
+        public string CourseName { get; set; }
     }
 }

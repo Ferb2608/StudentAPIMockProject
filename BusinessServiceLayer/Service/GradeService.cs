@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessServiceLayer.DTO;
+using BusinessServiceLayer.Validation;
 using RepositoryLayer;
 using RepositoryLayer.Entity;
 using RepositoryLayer.EntityRepo;
@@ -7,17 +8,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace BusinessServiceLayer
+namespace BusinessServiceLayer.Service
 {
     public class GradeService
     {
         private readonly GradeRepository gradeRepository;
         private readonly IMapper mapper;
-        public GradeService(GradeRepository gradeRepository, IMapper mapper)
+        private readonly ValidationService validationService;
+        public GradeService(GradeRepository gradeRepository, ValidationService validationService, IMapper mapper)
         {
             this.gradeRepository = gradeRepository;
+            this.validationService = validationService;
             this.mapper = mapper;
         }
         public async Task<IEnumerable<GradeOutputDTO>> Get(int pageNumber = 1, int pageSize = 10)
@@ -40,14 +44,18 @@ namespace BusinessServiceLayer
         }
         public async Task<GradeOutputDTO> Post(GradeInputDTO gradeInputDTO)
         {
-            var grade = mapper.Map<Grade>(gradeInputDTO);
+            if (!validationService.ValidateGradeValue(gradeInputDTO.GradeValue)) return null;
+            var grades = await gradeRepository.GetByProperty(gr => gr.GradeValue == gradeInputDTO.GradeValue);
+            var grade = grades.FirstOrDefault();
+            if (grade != null) return null;
+            grade = mapper.Map<Grade>(gradeInputDTO);
             grade = await gradeRepository.Post(grade);
             return mapper.Map<GradeOutputDTO>(grade);
         }
         public async Task<GradeOutputDTO> Put(int id, GradeInputDTO gradeInputDTO)
         {
             var grade = await gradeRepository.Get(id);
-            if (grade == null) return null;
+            if (grade == null || !validationService.ValidateGradeValue(gradeInputDTO.GradeValue)) return null;
             grade = mapper.Map<Grade>(gradeInputDTO);
             grade.Id = id;
             gradeRepository.Put(grade);
@@ -59,5 +67,6 @@ namespace BusinessServiceLayer
             if (grade == null) return;
             await gradeRepository.Delete(id);
         }
+
     }
 }
